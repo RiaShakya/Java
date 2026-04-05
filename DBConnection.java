@@ -6,14 +6,14 @@ import java.sql.DriverManager;
 public class DBConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/eventdb";
-    private static final String USER = "root";      // change if needed
-    private static final String PASSWORD = "Riasha@9707";  // change if needed
+    private static final String USER = "root";
+    private static final String PASSWORD = "Riasha@9707";
 
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); 
             return null;
         }
     }

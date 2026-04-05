@@ -1,71 +1,72 @@
 package EventRegistration;
-
 import java.util.*;
 
 public class EventManager {
-
     private static EventManager instance = new EventManager();
-    private List<User> users = new ArrayList<>();
-    private List<Event> events = new ArrayList<>();
+
+    private UserDAO         userDAO         = new UserDAO();
+    private EventDAO        eventDAO        = new EventDAO();
+    private RegistrationDAO registrationDAO = new RegistrationDAO();
+
     private User currentUser;
-    private int nextEventId = 1;
 
-    private EventManager() {
-        // Fixed admin
-        users.add(new User("Admin", "admin@gmail.com", "admin", "admin123", "ADMIN"));
-    }
+    private EventManager() {}
 
-    public static EventManager getInstance() {
-        return instance;
-    }
+    public static EventManager getInstance() { return instance; }
 
     public boolean registerUser(User user) {
-        // Prevent admin registration
         if ("ADMIN".equals(user.getRole())) return false;
-
-        for (User u : users) {
-            if (u.getUsername().equals(user.getUsername())) return false;
-        }
-        users.add(user);
-        return true;
+        return userDAO.registerUser(user);
     }
 
     public User login(String username, String pw) {
-        for (User u : users) {
-            if (u.getUsername().equals(username) && u.checkPassword(pw)) {
-                currentUser = u;
-                return u;
-            }
-        }
-        return null;
+        currentUser = userDAO.login(username, pw);
+        return currentUser;
     }
 
     public Event createEvent(String name, String desc, String dt, String venue, int seats) {
-        Event e = new Event(nextEventId++, name, desc, dt, venue, seats);
-        events.add(e);
+        Event e = new Event(0, name, desc, dt, venue, seats);
+        eventDAO.createEvent(e);
         return e;
     }
 
+    public boolean updateEvent(int id, String name, String desc, String dt, String venue, int seats) {
+        return eventDAO.updateEvent(id, name, desc, dt, venue, seats);
+    }
+
     public void deleteEvent(int id) {
-        events.removeIf(e -> e.getId() == id);
+        registrationDAO.deleteByEvent(id); // remove registrations first
+        eventDAO.deleteEvent(id);
     }
 
     public List<Event> getEvents() {
+        List<Event> events = eventDAO.getEvents();
+        for (Event e : events) {
+            List<User> participants = registrationDAO.getParticipants(e.getId());
+            for (User u : participants) e.addParticipant(u);
+        }
         return events;
     }
 
-    public boolean register(int eventId) {
-        Event e = getEventById(eventId);
-        if (e == null || !e.hasAvailableSeats()) return false;
-
-        e.addParticipant(currentUser);
-        return true;
+    /** Register a user for an event by event ID. Returns true if successful. */
+    public boolean register(User user, int eventId) {
+        List<Event> events = getEvents();
+        Event target = events.stream().filter(e -> e.getId() == eventId).findFirst().orElse(null);
+        if (target == null || !target.hasAvailableSeats()) return false;
+        boolean alreadyRegistered = target.getParticipants().stream()
+            .anyMatch(u -> u.getUsername().equals(user.getUsername()));
+        if (alreadyRegistered) return false;
+        return registrationDAO.register(user.getUsername(), eventId);
     }
 
-    public Event getEventById(int id) {
-        for (Event e : events) {
-            if (e.getId() == id) return e;
-        }
-        return null;
+    /** Unregister a user from an event. Returns true if successful. */
+    public boolean unregister(User user, int eventId) {
+        return registrationDAO.unregister(user.getUsername(), eventId);
+    }
+
+    // Legacy compatibility
+    public boolean register(int eventId) {
+        if (currentUser == null) return false;
+        return register(currentUser, eventId);
     }
 }

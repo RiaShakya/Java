@@ -1,5 +1,4 @@
 package EventRegistration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +27,4 @@ public class Event {
 
     public boolean hasAvailableSeats() { return participants.size() < totalSeats; }
     public void addParticipant(User user) { participants.add(user); }
-    }
+}

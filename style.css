@@ -1,23 +1,38 @@
 .root {
-    -fx-font-family: "Segoe UI";
-    -fx-background-color: #f4f6f9;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
 }
 
-.title {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
+.text-field:focused, .password-field:focused, .text-area:focused {
+    -fx-border-color: #e8c97e;
+    -fx-border-width: 1.5;
 }
 
-.button {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-}
+.table-view .column-header-background { -fx-background-color: #0d0d18; }
+.table-view .column-header { -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 10 8; }
+.table-view .column-header .label { -fx-text-fill: #e8c97e; -fx-font-weight: bold; -fx-font-size: 12px; }
 
-.button:hover {
-    -fx-background-color: #45a049;
-}
+.table-row-cell          { -fx-background-color: #1a1a2e; -fx-border-color: transparent; -fx-cell-size: 40px; }
+.table-row-cell:odd      { -fx-background-color: #15152a; }
+.table-row-cell:selected { -fx-background-color: #2a2a4a; }
+.table-row-cell:hover    { -fx-background-color: #222238; }
+.table-cell              { -fx-text-fill: #aabbcc; }
 
-.text-field, .password-field, .text-area {
-    -fx-background-radius: 6;
-}
+.scroll-pane, .scroll-pane > .viewport { -fx-background-color: transparent; -fx-background: transparent; }
+.scroll-bar                            { -fx-background-color: #0d0d18; }
+.scroll-bar .thumb                     { -fx-background-color: #2a2a3e; -fx-background-radius: 4; }
+
+.split-pane          { -fx-background-color: transparent; -fx-padding: 0; }
+.split-pane-divider  { -fx-background-color: #2a2a3e; -fx-padding: 0 1; }
+
+.separator .line { -fx-border-color: #2a2a3e; -fx-border-width: 0.5; }
+
+.progress-bar         { -fx-pref-height: 8; -fx-background-radius: 4; -fx-border-radius: 4; }
+.progress-bar > .bar  { -fx-background-radius: 4; }
+.progress-bar > .track { -fx-background-color: #2a2a3e; -fx-background-radius: 4; }
+
+.dialog-pane                    { -fx-background-color: #1a1a2e; -fx-font-family: "Segoe UI", sans-serif; }
+.dialog-pane .header-panel      { -fx-background-color: #0d0d18; }
+.dialog-pane .content.label     { -fx-text-fill: #c8c0b0; }
+.dialog-pane .button-bar .button { -fx-background-color: #e8c97e; -fx-text-fill: #0a0a0f; -fx-font-weight: bold; -fx-background-radius: 6; }
+

@@ -7,15 +7,20 @@ public class User {
         this.name = name;
         this.email = email;
         this.username = username;
-        this.password = password; // store plain text
+        this.password = password;
         this.role = role;
     }
 
     public boolean checkPassword(String pw) {
-        return password.equals(pw); // compare directly
+        return password.equals(pw);
     }
 
     public boolean isAdmin() { return "ADMIN".equals(role); }
+
+    public String getName() { return name; }
+    public String getEmail() { return email; }
     public String getUsername() { return username; }
+    public String getPassword() { return password; }
     public String getRole() { return role; }
 }
+
